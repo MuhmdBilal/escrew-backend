@@ -14,8 +14,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 // Routes
 app.use('/api/auth', authRoutes);
+const options = {
+  key: fs.readFileSync('./server.key'),
+  cert: fs.readFileSync('./server.crt')
+};
 
-
-app.listen(PORT, () => {
-    console.log(`Server runing on port ${PORT}`);
-  });
+https.createServer(options, app).listen(PORT, () => {
+  console.log('HTTPS server running on port PORT');
+});
+// app.listen(PORT, () => {
+//     console.log(`Server runing on port ${PORT}`);
+//   });
