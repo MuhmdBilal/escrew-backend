@@ -18,9 +18,9 @@ router.post('/register', async (req, res) => {
     });
    const response = await newUser.save();
     const token = jwt.sign(
-      { userId: response._id, name: response.name },
+      { userId: newUser._id, name: newUser.name },
       "Asdzxc9900!",
-      { expiresIn: '1d' }
+      { expiresIn: '1h' }
     );
 
     res.status(201).json({ message: 'User registered successfully', token, response });
@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, name: user.name},
       "Asdzxc9900!",
-      { expiresIn: '1d' }
+      { expiresIn: '1h' }
     );
     res.status(200).json({ message: 'Login successful', user, token });
   } catch (error) {

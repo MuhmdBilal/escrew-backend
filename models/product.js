@@ -10,13 +10,14 @@ const productSchema = new mongoose.Schema({
       phoneNumber: {type: String },
       productName: {type: String },
       productCategory: {type: String },
-      productPrice: {type: Number },
-      productDeliveryTime: {type: Number },
+      productPrice: {type: String },
+      productDeliveryTime: {type: String },
       userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
+    role: {type: String },
 },{
     timestamps: true
   })
