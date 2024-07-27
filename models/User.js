@@ -15,13 +15,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  role: {
-    type: String,
-    enum: ['buyer', 'seller'],
-    default: '',
-    required: true
-  },
   country: {type: String}
+},{
+  timestamps: true
 });
 userSchema.pre('save', async function(next) {
   const user = this;
