@@ -18,6 +18,13 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     role: {type: String },
+    orderId: {type: String },
+    walletAddress : {type: String },
+    status: {
+      type: String,
+      enum: ['pending', 'accepted', 'dispatched', 'canceled', 'approved'],
+      default: 'pending'
+  }
 },{
     timestamps: true
   })
