@@ -64,7 +64,7 @@ router.get("/get-product/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-router.get("/product-accept/:id", async (req, res) => {
+router.get("/product-accept/:id",authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -96,7 +96,7 @@ router.get("/product-accept/:id", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-router.get("/product-cancel/:id", async (req, res) => {
+router.get("/product-cancel/:id",authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -129,7 +129,7 @@ router.get("/product-cancel/:id", async (req, res) => {
   }
 });
 
-router.get("/product-dispatch/:id", async (req, res) => {
+router.get("/product-dispatch/:id",authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -162,7 +162,7 @@ router.get("/product-dispatch/:id", async (req, res) => {
   }
 });
 
-router.get("/product-approved/:id", async (req, res) => {
+router.get("/product-approved/:id",authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -192,6 +192,15 @@ router.get("/product-approved/:id", async (req, res) => {
       .json({ message: "Product status updated to approved", product: result });
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/get-all-order",authMiddleware, async (req, res) => {
+  try {
+    const result = await Product.find({userId: req.user?._id})
+    res.status(200).json({ data: result})
+  } catch (e) {
+    res.status(500).json({ message: "hello" });
   }
 });
 module.exports = router;
