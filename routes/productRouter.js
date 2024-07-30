@@ -31,18 +31,15 @@ const canceledTamplate = handlebars.compile(productCancelTemplateSource);
 const dispatchTamplate = handlebars.compile(productDispatchTemplateSource);
 const approvedTamplate = handlebars.compile(productApprovedTemplateSource);
 const template = handlebars.compile(productDetailsTemplateSource);
-router.post("/product", authMiddleware, async (req, res) => {
+router.post("/product", async (req, res) => {
   try {
-    const product = new Product({
-      ...req.body,
-      userId: req.user._id,
-    });
+    const product = new Product(req.body);
     await product.save();
     const mailOptions = {
       from: process.env.USER_EMAIL,
       to: req.body.buyerEmail,
       subject: "Product Purchase Confirmation'",
-      html: template({ orderId: req.body.orderId }),
+      html: template({ orderId: req.body.orderId, paymentType:req.body.paymentType  }),
     };
     await sendEmail(mailOptions);
     res.status(201).send({ message: "order created successfully." });
@@ -51,20 +48,20 @@ router.post("/product", authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/get-product/:id", authMiddleware, async (req, res) => {
+router.get("/get-product/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOne({ orderId: id });
     if (result) {
       res.status(200).json(result); // Send the found product
     } else {
-      res.status(404).json({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found against this Order Number" });
     }
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
   }
 });
-router.get("/product-accept/:id",authMiddleware, async (req, res) => {
+router.get("/product-accept/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -96,7 +93,7 @@ router.get("/product-accept/:id",authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-router.get("/product-cancel/:id",authMiddleware, async (req, res) => {
+router.get("/product-cancel/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -129,7 +126,7 @@ router.get("/product-cancel/:id",authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/product-dispatch/:id",authMiddleware, async (req, res) => {
+router.get("/product-dispatch/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -162,7 +159,7 @@ router.get("/product-dispatch/:id",authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/product-approved/:id",authMiddleware, async (req, res) => {
+router.get("/product-approved/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Product.findOneAndUpdate(
@@ -195,7 +192,7 @@ router.get("/product-approved/:id",authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/get-all-order",authMiddleware, async (req, res) => {
+router.get("/get-all-order", async (req, res) => {
   try {
     const result = await Product.find({userId: req.user?._id})
     res.status(200).json({ data: result})
