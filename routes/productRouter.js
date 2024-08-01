@@ -88,7 +88,7 @@ router.get("/product-accept/:id", async (req, res) => {
     }
     res
       .status(200)
-      .json({ message: "Product status updated to approved", product: result });
+      .json({ message: "Product Order Accepted successfully.", product: result });
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -120,7 +120,7 @@ router.get("/product-cancel/:id", async (req, res) => {
     }
     res
       .status(200)
-      .json({ message: "Product status updated to approved", product: result });
+      .json({ message: "Product Order Canceled successfully.", product: result });
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -153,7 +153,7 @@ router.get("/product-dispatch/:id", async (req, res) => {
     }
     res
       .status(200)
-      .json({ message: "Product status updated to approved", product: result });
+      .json({ message: "Product Order Dispatched successfully.", product: result });
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -186,7 +186,7 @@ router.get("/product-approved/:id", async (req, res) => {
     }
     res
       .status(200)
-      .json({ message: "Product status updated to approved", product: result });
+      .json({ message: "Product Order Approved successfully.", product: result });
   } catch (e) {
     res.status(500).json({ message: "Server Error" });
   }
