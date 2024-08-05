@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, country } = req.body;
+    const { name, email, password, country, role } = req.body;
     const existingUser = await User.findOne({email: email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with that email' });
@@ -14,11 +14,12 @@ router.post('/register', async (req, res) => {
       name,
       email,
       password,
-      country
+      country,
+      role
     });
    const response = await newUser.save();
     const token = jwt.sign(
-      { userId: newUser._id, name: newUser.name },
+      { userId: newUser._id, name: newUser.name, role: newUser.role },
       "Asdzxc9900!",
       { expiresIn: '1h' }
     );
@@ -50,4 +51,13 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+router.get("/all-user", async(req,res)=>{
+  try {
+    const users = await User.find({ role: 'user' });
+    res.status(200).json({ message: 'All User Get Successfully', users });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+})
 module.exports = router;
